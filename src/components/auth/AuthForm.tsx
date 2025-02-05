@@ -2,20 +2,23 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useToast } from "@/components/ui/use-toast";
 import { Eye, EyeOff } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
 
 export const AuthForm = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
-  const { toast } = useToast();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const { login, signUp, isLoading } = useAuth();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast({
-      title: "Em desenvolvimento",
-      description: "Sistema de autenticação em implementação",
-    });
+    if (isLogin) {
+      await login({ email, password });
+    } else {
+      await signUp({ email, password });
+    }
   };
 
   return (
@@ -31,14 +34,20 @@ export const AuthForm = () => {
             <Input
               type="email"
               placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="bg-black/20 border-white/10"
+              required
             />
           </div>
           <div className="space-y-2 relative">
             <Input
               type={showPassword ? "text" : "password"}
               placeholder="Senha"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               className="bg-black/20 border-white/10"
+              required
             />
             <Button
               type="button"
@@ -54,14 +63,15 @@ export const AuthForm = () => {
               )}
             </Button>
           </div>
-          <Button type="submit" className="w-full">
-            {isLogin ? "Entrar" : "Cadastrar"}
+          <Button type="submit" className="w-full" disabled={isLoading}>
+            {isLoading ? "Carregando..." : isLogin ? "Entrar" : "Cadastrar"}
           </Button>
           <Button
             type="button"
             variant="ghost"
             className="w-full"
             onClick={() => setIsLogin(!isLogin)}
+            disabled={isLoading}
           >
             {isLogin ? "Criar nova conta" : "Já tenho uma conta"}
           </Button>
