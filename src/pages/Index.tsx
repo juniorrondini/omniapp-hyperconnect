@@ -3,6 +3,7 @@ import { WelcomeCard } from "@/components/dashboard/WelcomeCard";
 import { QuickActions } from "@/components/dashboard/QuickActions";
 import { StatsCard } from "@/components/dashboard/StatsCard";
 import { RecentActivities } from "@/components/dashboard/RecentActivities";
+import { MetricsChart } from "@/components/dashboard/MetricsChart";
 
 const Index = () => {
   return (
@@ -11,6 +12,7 @@ const Index = () => {
         <WelcomeCard />
         <QuickActions />
         <StatsCard />
+        <MetricsChart />
         <RecentActivities />
       </div>
     </DashboardLayout>
